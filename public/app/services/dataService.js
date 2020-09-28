@@ -5,13 +5,13 @@
     .module( 'app' )
     .factory( 'dataService', dataService )
   ;
-  dataService.$inject = ['logger'];
-  function dataService( logger ) {
+  dataService.$inject = ['$q', '$timeout', 'logger'];
+  function dataService( $q, $timeout, logger ) {
     return { getAllBooks, getAllReaders };
 
     function getAllBooks() {
       logger.output( 'Getting all books...' );
-      return [
+      const booksArray = [
         {
           book_id: 1,
           title: 'Harry Potter and the Deathly Hallows',
@@ -31,10 +31,22 @@
           yearPublished: 1963
         }
       ];
+      const deferred = $q.defer();
+      $timeout( () => {
+        let success = true;
+        if ( success ) {
+          deferred.notify( 'Just getting started gathering books...' );
+          deferred.notify( 'Almost done gathering books...' );
+          deferred.resolve( booksArray );
+        } else {
+          deferred.reject( 'Error retrieving books...' );
+        }
+      }, 1e3 );
+      return deferred.promise;
     }
     function getAllReaders() {
       logger.output( 'Getting all readers...' );
-      return [
+      const readersArray = [
         {
           reader_id: 1,
           name: 'Marie',
@@ -54,6 +66,11 @@
           totalMinutesRead: 600
         }
       ];
+      const deferred = $q.defer();
+      $timeout( () => {
+        deferred.resolve( readersArray );
+      }, 16e2 );
+      return deferred.promise;
     }
   }
 })();
