@@ -6,15 +6,25 @@
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-theme.min.css" />
     <title></title>
   </head>
-  <body ng-app="app">
+  <body class="container" ng-app="app">
     <div ng-controller="BooksController as books">
       <h1>Hello {{books.appName}}!</h1>
+      <div>
+        <h3>All Books</h3>
+        <ul>
+          <li ng-repeat="book in books.allBooks">
+            {{book.title}} - {{book.author}}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/angular/angular.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/app/app.js"></script>
+    <script src="/app/services/dataService.js"></script>
+    <script src="/app/services/loggerService.js"></script>
     <script src="/app/books/BooksController.js"></script>
   </body>
 </html>
