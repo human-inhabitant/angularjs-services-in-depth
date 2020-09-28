@@ -2,7 +2,7 @@
   "name": "angularjs-services-in-depth",
   "version": "0.6.5",
   "description": "AngularJS Services In-depth",
-  "main": "app.js",
+  "main": "server.js",
   "dependencies": {
     "angular": "^1.8.0",
     "angular-animate": "^1.8.0",

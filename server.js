@@ -53,7 +53,7 @@ app.use( ( err, req, res, next ) => {
 
 const debug = require( 'debug' )( 'server' );
 
-app.set( 'port', process.env.PORT || 3000 );
+app.set( 'port', process.env.PORT || 3e3 );
 app.listen( app.get( 'port' ), () => {
   console.info( 'Start: %s', new Date() );
   console.info( 'Listening on port: %d', app.get( 'port' ) );

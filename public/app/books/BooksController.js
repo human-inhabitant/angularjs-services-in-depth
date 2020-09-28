@@ -3,9 +3,10 @@
 (function() {
   angular
     .module( 'app' )
-    .controller( 'BooksController', ['$scope', BooksController])
+    .controller( 'BooksController', ['books', BooksController])
   ;
-  function BooksController( $scope ) {
+  function BooksController( books ) {
     const vm = this;
+    vm.appName = books.appName;
   }
 })();
