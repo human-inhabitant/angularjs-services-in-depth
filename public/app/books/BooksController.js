@@ -3,12 +3,15 @@
 (function() {
   angular
     .module( 'app' )
-    .controller( 'BooksController', ['books', 'dataService', 'logger', BooksController])
+    .controller( 'BooksController', BooksController )
   ;
-  function BooksController( books, dataService, logger ) {
+  BooksController.$inject = ['books', 'dataService', 'badgeService', 'logger'];
+  function BooksController( books, dataService, badgeService, logger ) {
     const vm = this;
     vm.appName = books.appName;
     vm.allBooks = dataService.getAllBooks();
+    vm.allReaders = dataService.getAllReaders();
+    vm.getBadge = badgeService.retrieveBadge;
     logger.output( 'BooksController has been created.' );
   }
 })();

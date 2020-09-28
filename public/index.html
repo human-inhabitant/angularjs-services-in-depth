@@ -17,12 +17,23 @@
           </li>
         </ul>
       </div>
+      <div>
+        <h3>All Readers</h3>
+        <ul>
+          <li ng-repeat="reader in books.allReaders">
+            {{reader.name}} - {{books.getBadge( reader.totalMinutesRead )}}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/angular/angular.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <script src="/app/app.js"></script>
+    <script src="/app/services/constantService.js"></script>
+    <script src="/app/services/badgeService.js"></script>
     <script src="/app/services/dataService.js"></script>
     <script src="/app/services/loggerService.js"></script>
     <script src="/app/books/BooksController.js"></script>
