@@ -1,0 +1,37 @@
+{
+  "name": "angularjs-services-in-depth",
+  "version": "0.6.5",
+  "description": "AngularJS Services In-depth",
+  "main": "app.js",
+  "dependencies": {
+    "angular": "^1.8.0",
+    "angular-animate": "^1.8.0",
+    "angular-ui-bootstrap": "^2.5.6",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^3.4.1",
+    "cookie-parser": "^1.4.5",
+    "debug": "^4.2.0",
+    "express": "^4.17.1",
+    "jade": "^1.11.0",
+    "jquery": "^1.12.4",
+    "morgan": "^1.10.0",
+    "serve-favicon": "^2.5.0"
+  },
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/human-inhabitant/angularjs-services-in-depth.git"
+  },
+  "keywords": [
+    "Pluralsight",
+    "AngularJS"
+  ],
+  "author": "human-inhabitant",
+  "license": "copyleft-next-0.3.1",
+  "bugs": {
+    "url": "https://github.com/human-inhabitant/angularjs-services-in-depth/issues"
+  },
+  "homepage": "https://github.com/human-inhabitant/angularjs-services-in-depth#readme"
+}
