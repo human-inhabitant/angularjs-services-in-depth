@@ -4,31 +4,19 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="/assets/css/index.css" />
     <title></title>
   </head>
   <body class="container" ng-app="app">
-    <div ng-controller="BooksController as books">
-      <h1>Hello {{books.appName}}!</h1>
-      <div>
-        <h3>All Books</h3>
-        <ul>
-          <li ng-repeat="book in books.allBooks">
-            {{book.title}} - {{book.author}}
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3>All Readers</h3>
-        <ul>
-          <li ng-repeat="reader in books.allReaders">
-            {{reader.name}} - {{books.getBadge( reader.totalMinutesRead )}}
-          </li>
-        </ul>
-      </div>
+    <div class="well well-sm">
+      <h1>Book Logger</h1>
     </div>
+    <div ng-view></div>
 
     <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/angular-cookies/angular-cookies.min.js"></script>
+    <script src="/lib/angular-route/angular-route.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script src="/app/app.js"></script>
@@ -37,5 +25,7 @@
     <script src="/app/services/dataService.js"></script>
     <script src="/app/services/loggerService.js"></script>
     <script src="/app/books/BooksController.js"></script>
+    <script src="/app/books/AddBookController.js"></script>
+    <script src="/app/books/EditBookController.js"></script>
   </body>
 </html>

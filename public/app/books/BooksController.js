@@ -5,11 +5,14 @@
     .module( 'app' )
     .controller( 'BooksController', BooksController )
   ;
-  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', 'logger'];
-  function BooksController( $q, books, dataService, badgeService, logger ) {
+  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', 'logger', '$cookies'];
+  function BooksController( $q, books, dataService, badgeService, logger, $cookies ) {
     const vm = this;
     vm.appName = books.appName;
     vm.getBadge = badgeService.retrieveBadge;
+    vm.favoriteBook = $cookies.get( 'favoriteBook' );
+    vm.lastEdited = $cookies.getObject( 'lastEdited' );
+
     logger.output( 'BooksController has been created.' );
 
     const booksPromise = dataService.getAllBooks();

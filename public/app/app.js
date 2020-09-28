@@ -1,7 +1,7 @@
 'use strict';
 
 (function(){
-  angular.module( 'app', [] );
+  angular.module( 'app', ['ngRoute','ngCookies'] );
   angular
     .module( 'app' )
     .provider( 'books', [ 'constants', function( constants ) {
@@ -22,9 +22,45 @@
         includeVersionInTitle = value;
       };
     }])
-    .config(['booksProvider', 'constants', function( booksProvider, constants ) {
+    .config(['booksProvider', '$routeProvider', function( booksProvider, $routeProvider ) {
       booksProvider.setIncludeVersionInTitle( true );
-      console.info( 'Title from constants service: %s', constants.APP_TITLE );
+      $routeProvider
+        .when( '/', {
+          templateUrl: '/app/templates/books.html',
+          controller: 'BooksController',
+          controllerAs: 'books'
+        })
+        .when( '/addBook',{
+          templateUrl: '/app/templates/addBook.html',
+          controller: 'AddBookController',
+          controllerAs: 'addBook'
+        })
+        .when( '/editBook/:bookId',{
+          templateUrl: '/app/templates/editBook.html',
+          controller: 'EditBookController',
+          controllerAs: 'bookEditor',
+          resolve: {
+            books: dataService => dataService.getAllBooks()
+          }
+        })
+        .otherwise( '/' )
+      ;
+    }])
+    .run(['$rootScope', function( $rootScope ) {
+      $rootScope
+        .$on( '$routeChangeSuccess', function( event, current, previous ) {
+          console.info( '$routeChangeSuccess: Successfully changed routes...' );
+        })
+      ;
+      $rootScope
+        .$on( '$routeChangeError', function( event, current, previous, rejection ) {
+          console.info( '$routeChangeError: Error changing routes...' );
+          console.info( 'event', event );
+          console.info( 'current', current );
+          console.info( 'previous', previous );
+          console.info( 'rejection', rejection );
+        })
+      ;
     }])
   ;
 })();
