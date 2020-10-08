@@ -1,5 +1,6 @@
 (function () {
-  function BooksController($q, books, dataService, badgeService, $log, $cookies, $route, currentUser) {
+  function BooksController($q, books, dataService, badgeService,
+    $log, $cookies, $route, currentUser) {
     const vm = this;
     vm.appName = books.appName;
     vm.getBadge = badgeService.retrieveBadge;
@@ -38,7 +39,7 @@
     };
 
     function getUserSummarySuccess(summaryData) {
-      console.info(summaryData);
+      $log.info(summaryData);
       vm.summaryData = summaryData;
     }
     dataService

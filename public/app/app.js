@@ -19,8 +19,31 @@
         return { appName, appDesc };
       };
     }])
-    .config(['booksProvider', '$routeProvider', '$logProvider', '$httpProvider',
-      function (booksProvider, $routeProvider, $logProvider, $httpProvider) {
+    .config(['booksProvider', '$routeProvider', '$logProvider', '$httpProvider', '$provide',
+      function (booksProvider, $routeProvider, $logProvider, $httpProvider, $provide) {
+        function logDecorator($delegate, books) {
+          function log(message) {
+            $delegate.log(message);
+          }
+          function info(message) {
+            // eslint-disable-next-line no-param-reassign
+            message += ` - ${new Date()} (${books.appName})`;
+            $delegate.info(message);
+          }
+          function warn(message) {
+            $delegate.warn(message);
+          }
+          function error(message) {
+            $delegate.error(message);
+          }
+          function debug(message) {
+            $delegate.debug(message);
+          }
+          return {
+            log, info, warn, error, debug
+          };
+        }
+        $provide.decorator('$log', ['$delegate', 'books', logDecorator]);
         booksProvider.setIncludeVersionInTitle(true);
         $logProvider.debugEnabled(true);
         $httpProvider.interceptors.push('bookLoggerInterceptor');
