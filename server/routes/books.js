@@ -19,11 +19,11 @@ router
       book_id: nextID,
       title: req.body.title,
       author: req.body.author,
-      year_published: req.body.year_published
+      yearPublished: req.body.yearPublished
     };
     data.push( newBook );
     saveBookData( data );
-    // res.set( 'Content-Type', 'application/json' );
+    //res.set( 'Content-Type', 'application/json' );
     res.status( 201 ).send( newBook );
   })
 ;
@@ -33,10 +33,10 @@ router
 router
   .route( '/:id' )
   .get( ( req, res ) => {
-    // console.info( 'Retrieving book id: %d', req.params.id );
+    console.info( 'Retrieving book id: %d', req.params.id );
     const data = getBookData();
     const matchingBooks = data.filter( item => {
-      return item.book_id === req.params.id;
+      return item.book_id === parseInt( req.params.id, 10 );
     });
     if ( matchingBooks.length === 0 ) {
       res.sendStatus( 404 );
@@ -62,7 +62,7 @@ router
   })
   .put( ( req, res ) => {
     const data = getBookData();
-    const matchingBooks = data.filter( item => item.book_id === req.params.id );
+    const matchingBooks = data.filter( item => item.book_id === parseInt( req.params.id, 10 ) );
 
     if ( matchingBooks.length === 0 ) {
       res.sendStatus( 404 );
@@ -70,7 +70,7 @@ router
       const bookToUpdate = matchingBooks[0];
       bookToUpdate.title = req.body.title;
       bookToUpdate.author = req.body.author;
-      bookToUpdate.year_published = req.body.year_published;
+      bookToUpdate.yearPublished = req.body.yearPublished;
       saveBookData( data );
       res.sendStatus( 204 );
     }

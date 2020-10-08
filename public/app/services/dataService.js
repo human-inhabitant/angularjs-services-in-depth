@@ -1,51 +1,92 @@
-'use strict';
-
-(function() {
-  angular
-    .module( 'app' )
-    .factory( 'dataService', dataService )
-  ;
-  dataService.$inject = ['$q', '$timeout', 'logger'];
-  function dataService( $q, $timeout, logger ) {
-    return { getAllBooks, getAllReaders };
-
-    function getAllBooks() {
-      logger.output( 'Getting all books...' );
-      const booksArray = [
-        {
-          book_id: 1,
-          title: 'Harry Potter and the Deathly Hallows',
-          author: 'J.K. Rowling',
-          yearPublished: 2000
-        },
-        {
-          book_id: 2,
-          title: 'The Cat in the Hat',
-          author: 'Dr. Seuss',
-          yearPublished: 1957
-        },
-        {
-          book_id: 3,
-          title: 'Encyclopedia Brown, Boy Detective',
-          author: 'Donald J. Sobol',
-          yearPublished: 1963
-        }
-      ];
-      const deferred = $q.defer();
-      $timeout( () => {
-        let success = true;
-        if ( success ) {
-          deferred.notify( 'Just getting started gathering books...' );
-          deferred.notify( 'Almost done gathering books...' );
-          deferred.resolve( booksArray );
-        } else {
-          deferred.reject( 'Error retrieving books...' );
-        }
-      }, 1e3 );
-      return deferred.promise;
+(function () {
+  function dataService($q, $timeout, $http, constants) {
+    function sendResponseData(response) {
+      return response.data;
     }
+    function sendGetBooksError(response) {
+      return $q.reject(`Error retrieving book(s). [HTTP Status: ${response.status}]`);
+    }
+    function transformGetBooks(data, headersGetter) {
+      // eslint-disable-next-line no-undef
+      const transformed = angular.fromJson(data);
+      transformed.forEach((currentValue, index, array) => {
+        // eslint-disable-next-line no-param-reassign
+        currentValue.dateDownloaded = new Date();
+      });
+      return transformed;
+    }
+    function getAllBooks() {
+      return $http({
+        method: 'GET',
+        url: 'api/books',
+        headers: {
+          'BookLogger-Version': constants.APP_VERSION
+        },
+        transformResponse: transformGetBooks
+      })
+        .then(sendResponseData)
+        .catch(sendGetBooksError);
+    }
+    function getBookById(bookId) {
+      return $http.get(`api/books/${bookId}`)
+        .then(sendResponseData)
+        .catch(sendGetBooksError);
+    }
+
+    function updateBookSuccess(response) {
+      return `Book updated: ${response.config.data.title}`;
+    }
+    function updateBookError(response) {
+      return $q.reject(`Error updating book. [HTTP Status: ${response.status}]`);
+    }
+    function updateBook(book) {
+      return $http({
+        method: 'PUT',
+        url: `api/books/${book.book_id}`,
+        data: book,
+        headers: {
+          'BookLogger-Version': constants.APP_VERSION
+        }
+      })
+        .then(updateBookSuccess)
+        .catch(updateBookError);
+    }
+
+    function addBookSuccess(response) {
+      return `Book added: ${response.config.data.title}`;
+    }
+    function addBookError(response) {
+      return $q.reject(`Error adding book. [HTTP Status: ${response.status}]`);
+    }
+    function transformPostRequest(data, headersGetter) {
+      // eslint-disable-next-line no-param-reassign
+      data.newBook = true;
+      return JSON.stringify(data);
+    }
+    function addBook(newBook) {
+      return $http.post('api/books', newBook, {
+        transformRequest: transformPostRequest
+      })
+        .then(addBookSuccess)
+        .catch(addBookError);
+    }
+
+    function deleteBookSuccess(response) {
+      return `Book deleted: ${response.config.data.title}`;
+    }
+    function deleteBookError(response) {
+      return $q.reject(`Error deleting book. [HTTP Status: ${response.status}]`);
+    }
+    function deleteBook(bookId) {
+      return $http({
+        method: 'DELETE',
+        url: `api/books/${bookId}`
+      })
+        .then(deleteBookSuccess)
+        .catch(deleteBookError);
+    }
+
     function getAllReaders() {
-      logger.output( 'Getting all readers...' );
       const readersArray = [
         {
           reader_id: 1,
@@ -67,11 +108,16 @@
         }
       ];
       const deferred = $q.defer();
-      $timeout( () => {
-        deferred.resolve( readersArray );
-      }, 16e2 );
+      deferred.resolve(readersArray);
       return deferred.promise;
     }
+    return {
+      getAllBooks, getBookById, addBook, deleteBook, updateBook, getAllReaders
+    };
   }
-})();
-
+  // eslint-disable-next-line no-undef
+  angular
+    .module('app')
+    .factory('dataService', dataService);
+  dataService.$inject = ['$q', '$timeout', '$http', 'constants'];
+}());

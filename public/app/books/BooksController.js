@@ -1,35 +1,40 @@
-'use strict';
-
-(function() {
-  angular
-    .module( 'app' )
-    .controller( 'BooksController', BooksController )
-  ;
-  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', 'logger', '$cookies'];
-  function BooksController( $q, books, dataService, badgeService, logger, $cookies ) {
+(function () {
+  function BooksController($q, books, dataService, badgeService, $log, $cookies, $route, BooksResource) {
     const vm = this;
     vm.appName = books.appName;
     vm.getBadge = badgeService.retrieveBadge;
-    vm.favoriteBook = $cookies.get( 'favoriteBook' );
-    vm.lastEdited = $cookies.getObject( 'lastEdited' );
+    vm.favoriteBook = $cookies.get('favoriteBook');
+    vm.lastEdited = $cookies.getObject('lastEdited');
 
-    logger.output( 'BooksController has been created.' );
+    $log.info('BooksController has been created.');
 
     const booksPromise = dataService.getAllBooks();
     const readerPromise = dataService.getAllReaders();
+
+    function getAllDataSuccess(dataArray) {
+      [vm.allBooks, vm.allReaders] = dataArray;
+    }
+    function getAllDataError(reason) {
+      $log.error('Error Message:', reason);
+    }
     $q
       .all([booksPromise, readerPromise])
-      .then( getAllDataSuccess )
-      .catch( getAllDataError )
-    ;
-    function getAllDataSuccess( dataArray ) {
-      vm.allBooks = dataArray[0];
-      vm.allReaders = dataArray[1];
-    }
-    function getAllDataError( reason ) {
-      console.error( 'Error Message:', reason );
-    }
+      .then(getAllDataSuccess)
+      .catch(getAllDataError);
 
+    function deleteBookSuccess(message) {
+      $log.info(message);
+      $route.reload();
+    }
+    function deleteBookError(errorMessage) {
+      $log.error(errorMessage);
+    }
+    vm.deleteBook = function (bookId) {
+      dataService
+        .deleteBook(bookId)
+        .then(deleteBookSuccess)
+        .catch(deleteBookError);
+    };
     /*
     dataService
       .getAllBooks()
@@ -63,4 +68,9 @@
     }
     */
   }
-})();
+  // eslint-disable-next-line no-undef
+  angular
+    .module('app')
+    .controller('BooksController', BooksController);
+  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', '$log', '$cookies', '$route', 'BooksResource'];
+}());

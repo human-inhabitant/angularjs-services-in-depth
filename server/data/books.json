@@ -1,38 +1,50 @@
 [
-  {
-    "book_id": 1,
-    "title": "Anna Karenina",
-    "author": "Leo Tolstoy",
-    "year_published": "1878"
-  },
-  {
-    "book_id": 2,
-    "title": "The Things They Carried",
-    "author": "Tim O'Brien",
-    "year_published": "1990"
-  },
-  {
-    "book_id": 3,
-    "title": "Invisible Man",
-    "author": "Ralph Ellison",
-    "year_published": "1952"
-  },
-  {
-    "book_id": 57,
-    "title": "Advanced OS X Programming",
-    "author": "Mark Dalrymple",
-    "year_published": "2010"
-  },
-  {
-    "book_id": 59,
-    "title": "The Cat and the Hat",
-    "author": "Dr. Seuss",
-    "year_published": "1950"
-  },
-  {
-    "book_id": 61,
-    "title": "Green Eggs and Ham",
-    "author": "Dr. Seuss",
-    "year_published": "1960"
-  }
+    {
+        "book_id": 1,
+        "title": "Goodnight Moon",
+        "author": "Margaret Wise Brown",
+        "yearPublished": "1953"
+    },
+    {
+        "book_id": 2,
+        "title": "Green Eggs and Ham",
+        "author": "Dr. Seuss",
+        "yearPublished": "1960"
+    },
+    {
+        "book_id": 3,
+        "title": "Where the Wild Things Are",
+        "author": "Maurice Sendak",
+        "yearPublished": "1963"
+    },
+    {
+        "book_id": 4,
+        "title": "The Hobbit",
+        "author": "J. R. R. Tolkien",
+        "yearPublished": "1937"
+    },
+    {
+        "book_id": 5,
+        "title": "Curious George",
+        "author": "H. A. Rey",
+        "yearPublished": "1941"
+    },
+    {
+        "book_id": 6,
+        "title": "Alice's Adventures in Wonderland",
+        "author": "Lewis Carroll",
+        "yearPublished": "1865"
+    },
+    {
+        "book_id": 7,
+        "title": "The Four Loves",
+        "author": "C. S. Lewis",
+        "yearPublished": "1965"
+    },
+    {
+        "book_id": 8,
+        "title": "Mere Christianity",
+        "author": "C. S. Lewis",
+        "yearPublished": "1961"
+    }
 ]

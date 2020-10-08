@@ -1,21 +1,43 @@
 <div>
   <h3>All Books</h3>
-  <ul>
-    <li ng-repeat="book in books.allBooks">
-      {{book.title}} - {{book.author}}
-      <a href="#!/editBook/{{book.book_id}}" class="btn btn-sm btn-info">Edit</a>
-    </li>
-  </ul>
-  <a href="#!/addBook" class="btn btn-sm btn-default">Add New Book</a>
-  <a href="#!/editBook/{{books.lastEdited.book_id}}" class="btn btn-sm btn-default">Open Last Edited</a>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Book</th>
+        <th>Author</th>
+        <th>Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="book in books.allBooks">
+        <td ng-bind="book.title"></td>
+        <td ng-bind="book.author"></td>
+        <td>
+          <a href="#!/editBook/{{book.book_id}}" class="btn btn-xs btn-default">Edit</a>
+          <a href="" class="btn btn-xs btn-default" ng-click="books.deleteBook( book.book_id )">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="#!/addBook" class="btn btn-xs btn-default">Add New Book</a>
+  <a href="#!/editBook/{{books.lastEdited.book_id}}" class="btn btn-xs btn-default">Open Last Edited</a>
 </div>
 <div>
   <h3>All Readers</h3>
-  <ul>
-    <li ng-repeat="reader in books.allReaders">
-      {{reader.name}} - {{books.getBadge( reader.totalMinutesRead )}}
-    </li>
-  </ul>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Reader</th>
+        <th>Badge</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="reader in books.allReaders">
+        <td ng-bind="reader.name"></td>
+        <td ng-bind="books.getBadge( reader.totalMinutesRead )"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div>
   <h3>Current Favorite Book</h3>
