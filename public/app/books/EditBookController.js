@@ -1,9 +1,11 @@
 (function () {
-  function editBookController($routeParams, books, $cookies, dataService, $log, $location) {
+  function editBookController($routeParams, books, $cookies, dataService, $log, $location, currentUser) {
     const vm = this;
     function getBookSuccess(book) {
       vm.currentBook = book;
-      $cookies.putObject('lastEdited', vm.currentBook, { samesite: 'strict' });
+      // $cookies.putObject('lastEdited', vm.currentBook, { samesite: 'strict' });
+      // eslint-disable-next-line no-param-reassign
+      currentUser.lastBookEdited = vm.currentBook;
     }
     function getBookError(reason) {
       $log.error(reason);
@@ -38,5 +40,5 @@
   angular
     .module('app')
     .controller('EditBookController', editBookController);
-  editBookController.$inject = ['$routeParams', 'books', '$cookies', 'dataService', '$log', '$location'];
+  editBookController.$inject = ['$routeParams', 'books', '$cookies', 'dataService', '$log', '$location', 'currentUser'];
 }());

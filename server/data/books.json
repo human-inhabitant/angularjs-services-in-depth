@@ -36,15 +36,15 @@
         "yearPublished": "1865"
     },
     {
-        "book_id": 7,
-        "title": "The Four Loves",
-        "author": "C. S. Lewis",
-        "yearPublished": "1965"
-    },
-    {
         "book_id": 8,
         "title": "Mere Christianity",
         "author": "C. S. Lewis",
         "yearPublished": "1961"
+    },
+    {
+        "book_id": 9,
+        "title": "Out of the Silent Planet",
+        "author": "C. S. Lewis",
+        "yearPublished": "1946"
     }
 ]

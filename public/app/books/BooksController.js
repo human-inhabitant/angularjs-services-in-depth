@@ -1,10 +1,11 @@
 (function () {
-  function BooksController($q, books, dataService, badgeService, $log, $cookies, $route, BooksResource) {
+  function BooksController($q, books, dataService, badgeService, $log, $cookies, $route, currentUser) {
     const vm = this;
     vm.appName = books.appName;
     vm.getBadge = badgeService.retrieveBadge;
     vm.favoriteBook = $cookies.get('favoriteBook');
-    vm.lastEdited = $cookies.getObject('lastEdited');
+    // vm.lastEdited = $cookies.getObject('lastEdited');
+    vm.currentUser = currentUser;
 
     $log.info('BooksController has been created.');
 
@@ -35,6 +36,14 @@
         .then(deleteBookSuccess)
         .catch(deleteBookError);
     };
+
+    function getUserSummarySuccess(summaryData) {
+      console.info(summaryData);
+      vm.summaryData = summaryData;
+    }
+    dataService
+      .getUserSummary()
+      .then(getUserSummarySuccess);
     /*
     dataService
       .getAllBooks()
@@ -72,5 +81,5 @@
   angular
     .module('app')
     .controller('BooksController', BooksController);
-  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', '$log', '$cookies', '$route', 'BooksResource'];
+  BooksController.$inject = ['$q', 'books', 'dataService', 'badgeService', '$log', '$cookies', '$route', 'currentUser'];
 }());

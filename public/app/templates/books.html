@@ -1,3 +1,10 @@
+<div class="panel panel-success">
+  <div class="panel-heading text-center">
+    Books <span class="badge">{{books.summaryData.bookCount}}</span> |
+    Readers <span class="badge">{{books.summaryData.readerCount}}</span> |
+    Total Minutes Read <span class="badge">{{books.summaryData.grandTotalMinutes}}</span>
+  </div>
+</div>
 <div>
   <h3>All Books</h3>
   <table class="table table-condensed">
@@ -20,7 +27,7 @@
     </tbody>
   </table>
   <a href="#!/addBook" class="btn btn-xs btn-default">Add New Book</a>
-  <a href="#!/editBook/{{books.lastEdited.book_id}}" class="btn btn-xs btn-default">Open Last Edited</a>
+  <a href="#!/editBook/{{books.currentUser.lastBookEdited.book_id}}" class="btn btn-xs btn-default">Open Last Edited</a>
 </div>
 <div>
   <h3>All Readers</h3>

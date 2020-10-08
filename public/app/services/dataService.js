@@ -1,5 +1,13 @@
 (function () {
-  function dataService($q, $timeout, $http, constants) {
+  function dataService($q, $timeout, $http, constants, $cacheFactory) {
+    function deleteSummaryCache() {
+      const dataCache = $cacheFactory.get('bookLoggerCache');
+      dataCache.remove('summary');
+    }
+    function deleteAllBooksResponseFromCache() {
+      const httpCache = $cacheFactory.get('$http');
+      httpCache.remove('api/books');
+    }
     function sendResponseData(response) {
       return response.data;
     }
@@ -22,7 +30,8 @@
         headers: {
           'BookLogger-Version': constants.APP_VERSION
         },
-        transformResponse: transformGetBooks
+        transformResponse: transformGetBooks,
+        cache: true
       })
         .then(sendResponseData)
         .catch(sendGetBooksError);
@@ -40,6 +49,8 @@
       return $q.reject(`Error updating book. [HTTP Status: ${response.status}]`);
     }
     function updateBook(book) {
+      deleteSummaryCache();
+      deleteAllBooksResponseFromCache();
       return $http({
         method: 'PUT',
         url: `api/books/${book.book_id}`,
@@ -64,6 +75,8 @@
       return JSON.stringify(data);
     }
     function addBook(newBook) {
+      deleteSummaryCache();
+      deleteAllBooksResponseFromCache();
       return $http.post('api/books', newBook, {
         transformRequest: transformPostRequest
       })
@@ -78,6 +91,8 @@
       return $q.reject(`Error deleting book. [HTTP Status: ${response.status}]`);
     }
     function deleteBook(bookId) {
+      deleteSummaryCache();
+      deleteAllBooksResponseFromCache();
       return $http({
         method: 'DELETE',
         url: `api/books/${bookId}`
@@ -111,13 +126,47 @@
       deferred.resolve(readersArray);
       return deferred.promise;
     }
+
+    function getUserSummary() {
+      const deferred = $q.defer();
+      let dataCache = $cacheFactory.get('bookLoggerCache');
+      if (!dataCache) {
+        dataCache = $cacheFactory('bookLoggerCache');
+      }
+      const summaryFromCache = dataCache.get('summary');
+      if (summaryFromCache) {
+        console.info('Returning summary from cache...');
+        deferred.resolve(summaryFromCache);
+      } else {
+        console.info('Gathering new summary data...');
+        const booksPromise = getAllBooks();
+        const readersPromise = getAllReaders();
+        $q
+          .all([booksPromise, readersPromise])
+          .then((bookLoggerData) => {
+            const [allBooks, allReaders] = bookLoggerData;
+            let grandTotalMinutes = 0;
+            allReaders.forEach((currentReader, index, array) => {
+              grandTotalMinutes += currentReader.totalMinutesRead;
+            });
+            const summaryData = {
+              bookCount: allBooks.length,
+              readerCount: allReaders.length,
+              grandTotalMinutes
+            };
+            dataCache.put('summary', summaryData);
+            deferred.resolve(summaryData);
+          });
+      }
+      return deferred.promise;
+    }
     return {
-      getAllBooks, getBookById, addBook, deleteBook, updateBook, getAllReaders
+      getAllBooks, getBookById, addBook, deleteBook, updateBook, getAllReaders, getUserSummary
     };
   }
   // eslint-disable-next-line no-undef
   angular
     .module('app')
     .factory('dataService', dataService);
-  dataService.$inject = ['$q', '$timeout', '$http', 'constants'];
+  dataService.$inject = ['$q', '$timeout', '$http', 'constants', '$cacheFactory'];
 }());
